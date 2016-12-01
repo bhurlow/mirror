@@ -1,6 +1,7 @@
-(ns mirror.core)
+(ns mirror.core
+  (:require [aleph.http :as http]
+            [ring.util.response :refer (response header redirect status)]))
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
+(defn wrap-pages [h]
+  (fn [req]
+    (response "FOO")))
