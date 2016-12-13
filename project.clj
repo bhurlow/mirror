@@ -8,9 +8,10 @@
                  [aleph "0.4.1-beta7"]
                  [cljsjs/react "15.3.1-0"]
                  [cljsjs/react-dom "15.3.1-0"]
+                 [org.clojure/clojurescript "1.9.293"]
                  [hiccup "1.0.5"]
                  [manifold "0.1.3"]
                  [me.raynes/fs "1.4.6"]
                  [mvxcvi/puget "1.0.1"]
                  [ring "1.4.0"]]
-  :profiles {:dev {:source-paths  ["dev" "src" "test"]}})
+  :profiles {:dev {:source-paths  ["dev" "src" "test" "pages"]}})
