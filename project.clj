@@ -9,6 +9,7 @@
                  [cljsjs/react "15.3.1-0"]
                  [cljsjs/react-dom "15.3.1-0"]
                  [org.clojure/clojurescript "1.9.293"]
+                 [org.omcljs/om "0.9.0"]
                  [hiccup "1.0.5"]
                  [manifold "0.1.3"]
                  [me.raynes/fs "1.4.6"]

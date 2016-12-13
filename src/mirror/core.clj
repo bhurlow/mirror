@@ -49,14 +49,16 @@
 (defn goog-require-str [ns-sym]
   (str "goog.require('" (str ns-sym) "')"))
 
-(defn layout [ns-sym js & body]
+(defn layout [ns-sym js props & body]
   (html5
     [:body
       [:h1 "layout"]
-      body
+      [:p (str props)]
+      (javascript-tag (str "__MIRROR_DATA__ = " "'" (pr-str props) "'"))
       (include-js "goog/base.js")
       (javascript-tag js)
-      (javascript-tag (goog-require-str ns-sym))]))
+      (javascript-tag (goog-require-str ns-sym))
+      [:div#__mount body]]))
 
 (defprotocol Page
   (render [x])
@@ -70,10 +72,11 @@
         load-res (load-file path)
         ns-str (str "pages." (name page-kw))
         page-var-sym (symbol (str ns-str "/page"))
-        page (resolve page-var-sym)
-        body (.render (page))
+        page ((resolve page-var-sym))
+        props (.setup page)
+        body (.render page)
         js (build path)]
-    (-> (layout (symbol ns-str) js body)
+    (-> (layout (symbol ns-str) js props body)
         (response))))
 
 (defn serve-not-found
