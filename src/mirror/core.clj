@@ -54,14 +54,14 @@
     [:body
       [:h1 "layout"]
       [:p (str props)]
+      [:div#__mount body]
       (javascript-tag (str "__MIRROR_DATA__ = " "'" (pr-str props) "'"))
       (include-js "goog/base.js")
       (javascript-tag js)
-      (javascript-tag (goog-require-str ns-sym))
-      [:div#__mount body]]))
+      (javascript-tag (goog-require-str ns-sym))]))
 
 (defprotocol Page
-  (render [x])
+  (render [props state])
   (setup [x]))
 
 (defn serve-page 
@@ -74,7 +74,7 @@
         page-var-sym (symbol (str ns-str "/page"))
         page ((resolve page-var-sym))
         props (.setup page)
-        body (.render page)
+        body (.render page {})
         js (build path)]
     (-> (layout (symbol ns-str) js props body)
         (response))))
