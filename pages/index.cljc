@@ -8,7 +8,6 @@
 
 #?(:cljs (enable-console-print!))
 
-
 (defprotocol Page
   (render [props state])
   (setup [x]))
@@ -30,25 +29,12 @@
 ;; cljs init
 #?(:cljs 
    (do
-     (let [props (reader/read-string js/__MIRROR_DATA__)]
-       (println "props" (keys props)))))
-
-; #?(:cljs
-;    (do
-;     (defonce thing (r/atom 0))
-;     (defn handle-click [e]
-;       (swap! thing inc)
-;       (println e))
-;     (defn foo-component []
-;       [:div {:on-click handle-click} (str "SUP" @thing)])
-;     (r/render-component 
-;       [foo-component] 
-;       (.getElementById js/document "__mount"))))
-
-    ; (defn state-ful-with-atom []
-    ;   [:div {:on-click #(swap! click-count inc)}
-    ;    "I have been clicked " @click-count " times."]))
-
-
-
-
+     (let [props (reader/read-string js/__MIRROR_DATA__)
+           state (r/atom {:clicks 0})]
+       (println "props" (keys props))
+       (aset js/window "onclick" #(swap! state update :clicks inc))
+      (defn foo-component []
+        [:div (str "SUP" (:clicks @state))])
+      (r/render-component 
+        [foo-component] 
+        (.getElementById js/document "__mount")))))
