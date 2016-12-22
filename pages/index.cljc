@@ -3,6 +3,7 @@
             [mirror.tools :as tools]
             #?(:clj  [clojure.java.io :as io])
             #?(:cljs [cljs.reader :as reader])
+            #?(:cljs [cljs.js :as self])
             #?(:cljs [cljsjs.react])
             #?(:cljs [cljsjs.react.dom])
             #?(:cljs [reagent.core :as r])
@@ -14,6 +15,16 @@
    (defn initial-state []
       {:todos [{:text "do laundry"}
                {:text "email dad"}]}))
+
+#?(:cljs
+   (do
+     (def st (cljs.js/empty-state))
+     (def my-eval-fn 
+       (fn [x] 
+         (println "EVAL FN" x)
+         (js/eval (:source x))))
+     (let [eval-fn #(cljs.js/eval-str st % nil {:eval my-eval-fn} println)]
+       (aset js/window (name :myeval) eval-fn))))
 
 ;; ===== actions
 
