@@ -1,5 +1,7 @@
 (ns pages.index
   (:require [components.thing]
+            [mirror.tools :as tools]
+            #?(:clj  [clojure.java.io :as io])
             #?(:cljs [cljs.reader :as reader])
             #?(:cljs [cljsjs.react])
             #?(:cljs [cljsjs.react.dom])
@@ -8,39 +10,39 @@
 
 #?(:cljs (enable-console-print!))
 
-(defonce foo 555)
+#?(:clj
+   (defn get-initial-props []
+      {:todos [{:text "do laundry"}
+               {:text "email dad"}]}))
 
-(defprotocol Page
-  (render [props state])
-  (setup [x]))
+;; ===== actions
 
-(defn page []
-  (reify Page
-    (render [props state] 
-      (println "INSIDE RENDER")
-      [:div
-        [:h1 (str "click!" (:clicks state))]])
-      ; [:div
-      ;   [:h1 "pre rendered htmls!"]
-      ;   (components.thing/widget 123)])
-    (setup [x] 
-      (println "IN SETUP")
-      {:init "props"
-       :values '(123 33 44 55)})))
+(def state (tools/box {}))
 
-;; cljs init
-#?(:cljs 
-   (do
-     (let [props (reader/read-string js/__MIRROR_DATA__)
-           state (r/atom {:clicks 0})]
-       (println "props" (keys props))
-       (aset js/window "onclick" #(swap! state update :clicks inc))
-      (defn foo-component []
-        [:div (str "SUP" (:clicks @state))])
-      (r/render-component 
-        [foo-component] 
-        (.getElementById js/document "__mount")))))
+(defn handle-input-change [e]
+  (println "ON INPUT CHANGE"))
 
+(defn handle-submit [e]
+  #?(:cljs (js/alert "submit!")))
 
+;; ===== rendering
+
+(defn render-todo-item [todo]
+  [:p (str "- " (:text todo))])
+
+(defn render [props]
+  [:div 
+   [:h1 "Todo List"
+    (for [x (:todos props)]
+      (render-todo-item x))
+    [:hr]
+    [:input {:type "text"
+             :on-change handle-input-change
+             :placeholder "make an todo item"}]
+    [:input {:type "submit" 
+             :on-click handle-submit
+             :value "make it!"}]]])
+
+(tools/inject)
 
 

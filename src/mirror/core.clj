@@ -13,7 +13,7 @@
 
 (require 'cljs.build.api)
 
-(defn build [src]
+(defn build-js [src]
   (cljs.build.api/build src
    {:optimizations :none
     :output-dir "public"}))
@@ -52,32 +52,31 @@
 (defn layout [ns-sym js props & body]
   (html5
     [:body
-      [:h1 "layout"]
-      [:p (str props)]
+      ; [:h1 "layout"]
+      ; [:p (str props)]
       [:div#__mount body]
       (javascript-tag (str "__MIRROR_DATA__ = " "'" (pr-str props) "'"))
       (include-js "goog/base.js")
       (javascript-tag js)
       (javascript-tag (goog-require-str ns-sym))]))
 
-(defprotocol Page
-  (render [props state])
-  (setup [x]))
-
 (defn serve-page 
-  "renders the page model found
-  at page-kw"
+  "call the render fn in corresponding page-kw file"
   [page-kw]
   (let [path (str "pages/" (name page-kw) ".cljc")
         load-res (load-file path)
         ns-str (str "pages." (name page-kw))
-        page-var-sym (symbol (str ns-str "/page"))
-        page ((resolve page-var-sym))
-        props (.setup page)
-        body (.render page {})
-        js (build path)]
-    (-> (layout (symbol ns-str) js props body)
-        (response))))
+        render-sym (symbol (str ns-str "/render"))
+        render-fn (resolve render-sym)
+        props-sym (symbol (str ns-str "/get-initial-props"))
+        props-fn (resolve props-sym)
+        props (when props-fn (props-fn))
+        body (render-fn (or props {}))
+        js (build-js path)]
+    (if (nil? render-fn)
+      (response (str "could not find var: " render-sym))
+      (-> (layout (symbol ns-str) js props body)
+          (response)))))
 
 (defn serve-not-found
   []
