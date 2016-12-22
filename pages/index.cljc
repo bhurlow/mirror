@@ -28,20 +28,24 @@
 ;; ===== rendering
 
 (defn render-todo-item [todo]
-  [:p (str "- " (:text todo))])
+  [:p {:key (:text todo)} 
+   (str "- " (:text todo))])
 
-(defn render [props]
-  [:div 
-   [:h1 "Todo List"
-    (for [x (:todos props)]
-      (render-todo-item x))
-    [:hr]
-    [:input {:type "text"
-             :on-change handle-input-change
-             :placeholder "make an todo item"}]
-    [:input {:type "submit" 
-             :on-click handle-submit
-             :value "make it!"}]]])
+(defn render []
+  (println "RENDER SETUP")
+  (fn [props]
+    (println "RENDERING WITH PROPS" props)
+    [:div 
+     [:h1 "Todo List"
+      (for [x (:todos props)]
+        (render-todo-item x))
+      [:hr]
+      [:input {:type "text"
+               :on-change handle-input-change
+               :placeholder "make an todo item"}]
+      [:input {:type "submit" 
+               :on-click handle-submit
+               :value "make it!"}]]]))
 
 (tools/inject)
 

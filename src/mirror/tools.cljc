@@ -16,10 +16,10 @@
      (println "SETIP CALLED")
      (do
        (let [props (reader/read-string js/__MIRROR_DATA__)]
-         (println "props" (keys props))
+         (println "props" props)
          ;; TODO how to derive the ns var??
          (r/render-component
-          [pages.index/render]
+          ((pages.index/render) props)
           (.getElementById js/document "__mount"))))))
 
 (defn inject []

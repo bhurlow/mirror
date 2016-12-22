@@ -71,7 +71,7 @@
         props-sym (symbol (str ns-str "/get-initial-props"))
         props-fn (resolve props-sym)
         props (when props-fn (props-fn))
-        body (render-fn (or props {}))
+        body ((render-fn) (or props {}))
         js (build-js path)]
     (if (nil? render-fn)
       (response (str "could not find var: " render-sym))
