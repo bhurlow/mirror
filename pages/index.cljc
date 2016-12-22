@@ -8,6 +8,8 @@
 
 #?(:cljs (enable-console-print!))
 
+(defonce foo 555)
+
 (defprotocol Page
   (render [props state])
   (setup [x]))
@@ -38,3 +40,7 @@
       (r/render-component 
         [foo-component] 
         (.getElementById js/document "__mount")))))
+
+
+
+
