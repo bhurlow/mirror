@@ -13,13 +13,15 @@
 ;; cljs init
 #?(:cljs 
    (defn- setup []
-     (println "SETIP CALLED")
+     (println "setting up frontend")
      (do
        (let [props (reader/read-string js/__MIRROR_DATA__)]
          (println "props" props)
+         (pages.index/reset-state props)
+         (println "state is right now" @pages.index/state)
          ;; TODO how to derive the ns var??
          (r/render-component
-          ((pages.index/render) props)
+          [pages.index/render]
           (.getElementById js/document "__mount"))))))
 
 (defn inject []

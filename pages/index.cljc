@@ -11,19 +11,39 @@
 #?(:cljs (enable-console-print!))
 
 #?(:clj
-   (defn get-initial-props []
+   (defn initial-state []
       {:todos [{:text "do laundry"}
                {:text "email dad"}]}))
 
 ;; ===== actions
 
-(def state (tools/box {}))
+(defonce state (tools/box {}))
+
+;; my ns resolves can't seem to find an atom
+;; works on fns tho...
+;; (reset! (resolve 'pages.index/state) 123)
+(defn reset-state [data]
+  (println "setting initial state")
+  (reset! state data))
 
 (defn handle-input-change [e]
-  (println "ON INPUT CHANGE"))
+  #?(:cljs
+     (do
+      (swap! state assoc :in (.-value (.-target e))))))
 
 (defn handle-submit [e]
-  #?(:cljs (js/alert "submit!")))
+  #?(:cljs 
+     (do 
+       (swap! state update-in [:todos] conj {:text (:in @state)}))))
+
+(defn handle-lisp-change [e]
+  #?(:cljs
+     (do
+      (swap! state assoc :lisp (.-value (.-target e))))))
+
+(defn handle-lisp-submit [e]
+  #?(:cljs
+     (js/alert "SUP")))
 
 ;; ===== rendering
 
@@ -32,20 +52,25 @@
    (str "- " (:text todo))])
 
 (defn render []
-  (println "RENDER SETUP")
-  (fn [props]
-    (println "RENDERING WITH PROPS" props)
-    [:div 
-     [:h1 "Todo List"
-      (for [x (:todos props)]
-        (render-todo-item x))
-      [:hr]
-      [:input {:type "text"
-               :on-change handle-input-change
-               :placeholder "make an todo item"}]
-      [:input {:type "submit" 
-               :on-click handle-submit
-               :value "make it!"}]]]))
+  (println "RENDERING")
+  (println "STATE AT RENDER" @state)
+  [:div 
+   [:h1 "Todo List"]
+   (for [x (:todos @state)]
+     (render-todo-item x))
+   [:hr]
+   [:input {:type "text"
+            :on-change handle-input-change
+            :placeholder "make an todo item"}]
+   [:input {:type "submit" 
+            :on-click handle-submit
+            :value "make it!"}]
+   [:input {:type :text
+            :on-change handle-lisp-change
+            :placeholder "insert command"}]
+   [:input {:type "submit" 
+            :on-click handle-lisp-submit
+            :value "eval form"}]])
 
 (tools/inject)
 

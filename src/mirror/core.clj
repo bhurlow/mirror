@@ -63,15 +63,24 @@
 (defn serve-page 
   "call the render fn in corresponding page-kw file"
   [page-kw]
+  ;; TODO refactor to have all this happen in 
+  ;; bound ns and return data
   (let [path (str "pages/" (name page-kw) ".cljc")
         load-res (load-file path)
         ns-str (str "pages." (name page-kw))
         render-sym (symbol (str ns-str "/render"))
         render-fn (resolve render-sym)
-        props-sym (symbol (str ns-str "/get-initial-props"))
-        props-fn (resolve props-sym)
-        props (when props-fn (props-fn))
-        body ((render-fn) (or props {}))
+        ;; this is breaking! why can't I look it up!
+        ;; gettinb back a 'var not an atom
+        ;; found workaround with fn but still confused
+        ; state-sym (symbol (str ns-str "/state"))
+        ; state-var (resolve state-sym)
+        inital-state-sym (symbol (str ns-str "/initial-state"))
+        inital-state-fn (resolve inital-state-sym)
+        reset-state-fn (resolve (symbol (str ns-str "/reset-state")))
+        props (when (and inital-state-fn reset-state-fn)
+                (reset-state-fn (inital-state-fn)))
+        body (render-fn)
         js (build-js path)]
     (if (nil? render-fn)
       (response (str "could not find var: " render-sym))
