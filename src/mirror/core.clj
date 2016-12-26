@@ -55,13 +55,15 @@
       ; [:h1 "layout"]
       ; [:p (str props)]
       [:div#__mount body]
+      [:div#repl]
       (javascript-tag (str "__MIRROR_DATA__ = " "'" (pr-str props) "'"))
       (include-js "goog/base.js")
       (javascript-tag js)
       (javascript-tag (goog-require-str ns-sym))]))
 
 (defn serve-page 
-  "call the render fn in corresponding page-kw file"
+  "find a page file matching page-kw. renders and serves
+   the found file with compile js"
   [page-kw]
   ;; TODO refactor to have all this happen in 
   ;; bound ns and return data

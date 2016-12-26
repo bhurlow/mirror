@@ -1,6 +1,7 @@
 (ns pages.index
   (:require [components.thing]
             [mirror.tools :as tools]
+            [mirror.repl :as repl]
             #?(:clj  [clojure.java.io :as io])
             #?(:cljs [cljs.reader :as reader])
             #?(:cljs [cljs.js :as self])
@@ -84,5 +85,6 @@
             :value "eval form"}]])
 
 (tools/inject)
+(repl/repl)
 
 
