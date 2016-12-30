@@ -35,7 +35,6 @@
 ;; works on fns tho...
 ;; (reset! (resolve 'pages.index/state) 123)
 (defn reset-state [data]
-  (println "setting initial state")
   (reset! state data))
 
 (defn handle-input-change [e]
@@ -67,8 +66,6 @@
    (str "- " (:text todo))])
 
 (defn render []
-  (println "RENDERING")
-  (println "STATE AT RENDER" @state)
   [:div 
    [:h1 "Todo List"]
    (for [x (:todos @state)]

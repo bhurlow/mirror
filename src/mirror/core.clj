@@ -83,6 +83,7 @@
   "find a page file matching page-kw. renders and serves
    the found file with compile js"
   [path page-kw]
+  (println page-kw)
   ;; TODO refactor to have all this happen in 
   ;; bound ns and return data
   (let [path (str path "/" (name page-kw) ".cljc")
