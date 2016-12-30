@@ -5,6 +5,7 @@
             [hiccup.page :refer :all]
             [hiccup.form :refer :all]
             [hiccup.def :refer :all]
+            [cljs.env :as env]
             [hiccup.element :refer :all]
             [ring.middleware.file :refer (wrap-file)]
             [ring.util.response :refer (response header redirect status)]))
@@ -13,16 +14,33 @@
 
 (require 'cljs.build.api)
 
+(def watches (atom #{}))
+
+(defn watch-fn []
+  (println "WATCH FN DONE"))
+
+(defn watch-js [src]
+  (cljs.build.api/watch src
+    {:optimizations :none
+     :output-dir "public"
+     :watch-fn watch-fn}))
+
+(def compiler-env (env/default-compiler-env))
+
 (defn build-js [src]
   (cljs.build.api/build src
    {:optimizations :none
-    :output-dir "public"}))
+    :cache-analysis true
+    :compiler-stats true
+    :parallel-build true
+    :output-dir "public"}
+   compiler-env))
 
 (defn- pages-set
   "returns a set of keywords representing
   all existing pages files in the pages dir"
-  []
-  (->> (fs/list-dir "pages")
+  [path]
+  (->> (fs/list-dir path)
        (map fs/base-name)
        (map #(clojure.string/split % #"\."))
        (map first)
@@ -43,8 +61,8 @@
 (defn- page-exists? 
   "returns true if page-kw is found
   in pages-set"
-  [page-kw]
-  (contains? (pages-set) page-kw))
+  [path page-kw]
+  (contains? (pages-set path) page-kw))
 
 (defn goog-require-str [ns-sym]
   (str "goog.require('" (str ns-sym) "')"))
@@ -64,10 +82,10 @@
 (defn serve-page 
   "find a page file matching page-kw. renders and serves
    the found file with compile js"
-  [page-kw]
+  [path page-kw]
   ;; TODO refactor to have all this happen in 
   ;; bound ns and return data
-  (let [path (str "pages/" (name page-kw) ".cljc")
+  (let [path (str path "/" (name page-kw) ".cljc")
         load-res (load-file path)
         ns-str (str "pages." (name page-kw))
         render-sym (symbol (str ns-str "/render"))
@@ -83,7 +101,10 @@
         props (when (and inital-state-fn reset-state-fn)
                 (reset-state-fn (inital-state-fn)))
         body (render-fn)
-        js (build-js path)]
+        start (System/currentTimeMillis)
+        js (build-js path)
+        end (System/currentTimeMillis)]
+    (println "compiled cljs in" (- end start))
     (if (nil? render-fn)
       (response (str "could not find var: " render-sym))
       (-> (layout (symbol ns-str) js props body)
@@ -91,14 +112,14 @@
 
 (defn serve-not-found
   []
-  (-> (response "not found")
+  (-> (response "mir not found")
       (status 404)))
 
-(defn wrap-pages [h]
+(defn wrap-pages [h path]
   (fn [req]
-    (if (not (page-exists? (extract-path-kw req)))
+    (if (not (page-exists? path (extract-path-kw req)))
       (serve-not-found)
-      (serve-page (extract-path-kw req)))))
+      (serve-page path (extract-path-kw req)))))
 
 (defn handler [h]
   (fn [req]
@@ -106,7 +127,7 @@
 
 (def app
   (-> handler
-      (wrap-pages)
+      (wrap-pages "src/pages")
       (wrap-file "public")))
 
 

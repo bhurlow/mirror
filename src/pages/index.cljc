@@ -1,7 +1,7 @@
 (ns pages.index
   (:require [components.thing]
             [mirror.tools :as tools]
-            [mirror.repl :as repl]
+            ; [mirror.repl :as repl]
             #?(:clj  [clojure.java.io :as io])
             #?(:cljs [cljs.reader :as reader])
             #?(:cljs [cljs.js :as self])
@@ -59,6 +59,9 @@
 
 ;; ===== rendering
 
+(defn foo []
+  (swap! state assoc :foo 123))
+
 (defn render-todo-item [todo]
   [:p {:key (:text todo)} 
    (str "- " (:text todo))])
@@ -85,6 +88,6 @@
             :value "eval form"}]])
 
 (tools/inject)
-(repl/repl)
+; (repl/repl)
 
 
