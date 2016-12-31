@@ -15,4 +15,6 @@
                  [me.raynes/fs "1.4.6"]
                  [mvxcvi/puget "1.0.1"]
                  [ring "1.4.0"]]
-  :profiles {:dev {:source-paths  ["dev" "src" "test"]}})
+  :uberjar-name "mirror.jar"
+  :profiles {:dev {:source-paths  ["dev" "src" "test" "example"]}
+             :uberjar {:main mirror.cli}})

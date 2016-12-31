@@ -47,7 +47,7 @@
        (map keyword)
        (set)))
 
-(defn- extract-path-kw
+(defn extract-path-kw
   "takes a req, returns the keywoard of the page 
   it's looking for"
   [req]
@@ -58,7 +58,7 @@
         (second)
         (keyword))))
 
-(defn- page-exists? 
+(defn page-exists? 
   "returns true if page-kw is found
   in pages-set"
   [path page-kw]
@@ -83,6 +83,7 @@
   "find a page file matching page-kw. renders and serves
    the found file with compile js"
   [path page-kw]
+  (println "serving" path)
   (println page-kw)
   ;; TODO refactor to have all this happen in 
   ;; bound ns and return data
@@ -115,21 +116,6 @@
   []
   (-> (response "mir not found")
       (status 404)))
-
-(defn wrap-pages [h path]
-  (fn [req]
-    (if (not (page-exists? path (extract-path-kw req)))
-      (serve-not-found)
-      (serve-page path (extract-path-kw req)))))
-
-(defn handler [h]
-  (fn [req]
-    (h req)))
-
-(def app
-  (-> handler
-      (wrap-pages "src/pages")
-      (wrap-file "public")))
 
 
 
