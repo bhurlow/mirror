@@ -14,13 +14,16 @@ in your project.clj deps:
 
 ### CLI usage
 
+to build the cli command, clone the repo and build the jar:
+
 ```
-git clone bhurlow/mirror
+git clone git@github.com/bhurlow/mirror
+cd mirror && lein uberjar
 ln -s $PWD/bin/mirror ~/bin
 ```
 
 ### Rationale
 
-- getting start with cljs is actually pretty hard
+- cljs should be easier to use out of the box 
 - no more confusing build steps, gulp etc (have a tool wrap this)
 
