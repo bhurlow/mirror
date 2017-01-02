@@ -4,10 +4,10 @@
             [mirror.middleware :refer (make-handler)]))
 
 (defonce server (atom nil))
-(defonce handler (make-handler "src/pages" "public"))
 
 (defn start-server []
-  (reset! server (http/start-server #'handler {:port 3500})))
+  (let [handler (make-handler "example/pages" "example/static")]
+    (reset! server (http/start-server handler {:port 3000}))))
 
 (defn go []
   (start-server))

@@ -26,4 +26,6 @@ ln -s $PWD/bin/mirror ~/bin
 
 - cljs should be easier to use out of the box 
 - no more confusing build steps, gulp etc (have a tool wrap this)
+- no backend required if you just want to play with cljs
+- no *frontend* required if use simple html rendering
 
