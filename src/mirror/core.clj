@@ -15,11 +15,12 @@
 
 ;; ===== Def Protocol Page =====
 
-(defn parse-deps 
-  "given an ns form, extract deps in to a set"
-  [form]
-  (-> form
-      third))
+;; there must be a good clj way to do this!
+; (defn parse-deps 
+;   "given an ns form, extract deps in to a set"
+;   [form]
+;   (-> form
+;       third))
 
 (defn md5 [s]
   (let [algorithm (MessageDigest/getInstance "MD5")

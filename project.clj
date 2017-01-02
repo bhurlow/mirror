@@ -1,9 +1,10 @@
-(defproject mirror "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
+(defproject mirror "0.0.1"
+  :description "isomorphic clojure/script web apps"
   :main mirror.core
-  :url "http://example.com/FIXME"
+  :url "https://github.com/bhurlow/mirror"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
+  :repositories [["releases" {:url "https://clojars.org/repo" :creds :gpg}]]
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [aleph "0.4.1-beta7"]
                  [cljsjs/react "15.3.1-0"]
