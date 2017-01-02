@@ -3,5 +3,5 @@
 
 (defn render []
   [:div 
-    [:h1 "RE!"]
+    [:h1 "HELLO WORLD!"]
     (u/foo)])

@@ -8,33 +8,27 @@
             [cljs.env :as env]
             [hiccup.element :refer :all]
             [ring.middleware.file :refer (wrap-file)]
-            [ring.util.response :refer (response header redirect status)]))
+            [ring.util.response :refer (response header redirect status)]
+            [mirror.compile :as compile])
+  (:import java.security.MessageDigest
+           java.math.BigInteger))
 
 ;; ===== Def Protocol Page =====
 
+(defn md5 [s]
+  (let [algorithm (MessageDigest/getInstance "MD5")
+        size (* 2 (.getDigestLength algorithm))
+        raw (.digest algorithm (.getBytes s))
+        sig (.toString (BigInteger. 1 raw) 16)
+        padding (apply str (repeat (- size (count sig)) "0"))]
+    (str padding sig)))
+
 (require 'cljs.build.api)
 
-(def watches (atom #{}))
-
-(defn watch-fn []
-  (println "WATCH FN DONE"))
-
-(defn watch-js [src]
-  (cljs.build.api/watch src
-    {:optimizations :none
-     :output-dir "public"
-     :watch-fn watch-fn}))
-
-(def compiler-env (env/default-compiler-env))
-
-(defn build-js [src]
-  (cljs.build.api/build src
-   {:optimizations :none
-    :cache-analysis true
-    :compiler-stats true
-    :parallel-build true
-    :output-dir "public"}
-   compiler-env))
+(defn hash-pages-dir [pages-path]
+  (->> (fs/list-dir pages-path)
+       (map (fn [x] [(fs/base-name x) (-> x slurp md5)])) 
+       (into {})))
 
 (defn- pages-set
   "returns a set of keywords representing
@@ -101,7 +95,7 @@
                 (reset-state-fn (inital-state-fn)))
         body (render-fn)
         start (System/currentTimeMillis)
-        js (build-js path)
+        js (compile/build-js path)
         end (System/currentTimeMillis)]
     (println "compiled cljs in" (- end start))
     (if (nil? render-fn)
