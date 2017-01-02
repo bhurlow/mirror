@@ -70,8 +70,6 @@
 (defn layout [ns-sym js props & body]
   (html5
     [:body
-      ; [:h1 "layout"]
-      ; [:p (str props)]
       [:div#__mount body]
       [:div#repl]
       (javascript-tag (str "__MIRROR_DATA__ = " "'" (pr-str props) "'"))
@@ -83,8 +81,6 @@
   "find a page file matching page-kw. renders and serves
    the found file with compile js"
   [path page-kw]
-  (println "serving" path)
-  (println page-kw)
   ;; TODO refactor to have all this happen in 
   ;; bound ns and return data
   (let [path (str path "/" (name page-kw) ".cljc")
@@ -116,8 +112,5 @@
   []
   (-> (response "mir not found")
       (status 404)))
-
-
-
 
 
