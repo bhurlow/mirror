@@ -73,6 +73,7 @@
       [:div#__mount body]
       [:div#repl]
       (javascript-tag (str "__MIRROR_DATA__ = " "'" (pr-str props) "'"))
+      (include-css "/tachyons.min.css")
       (include-js "goog/base.js")
       (javascript-tag js)
       (javascript-tag (goog-require-str ns-sym))]))

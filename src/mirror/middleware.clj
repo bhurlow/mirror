@@ -1,6 +1,7 @@
 (ns mirror.middleware
   (:require [mirror.core :as c]
             [ring.middleware.file :refer (wrap-file)]
+            [ring.middleware.resource :refer (wrap-resource)]
             [ring.util.response :refer (response header redirect status)]))
 
 (defn wrap-pages [h path]
@@ -16,5 +17,6 @@
 (defn make-handler [pages-path static-path]
   (-> handler
       (wrap-pages pages-path)
-      (wrap-file static-path)))
+      (wrap-file static-path)
+      (wrap-resource "/")))
 
