@@ -19,6 +19,8 @@ cljs.core.println.call(null,"props",props);
 
 cljs.core.println.call(null,"state is right now",cljs.core.deref.call(null,state));
 
+cljs.core.reset_BANG_.call(null,state,props);
+
 return reagent.core.render_component.call(null,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [render_fn], null),document.getElementById("__mount"));
 });
 mirror.tools.inject = (function mirror$tools$inject(state,render_fn){

@@ -5,10 +5,10 @@
 
 #?(:cljs (enable-console-print!))
 
+;; the initial-state fn pre-populates
 #?(:clj
-   (defn initial-state []
-      {:todos [{:text "do laundry"}
-               {:text "email dad"}]}))
+   (defn initial-state [] 500))
+      
 
 (def state (tools/state-atom 0)) 
 

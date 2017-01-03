@@ -5,10 +5,10 @@
 
 #?(:cljs (enable-console-print!))
 
+;; the initial-state fn pre-populates
 #?(:clj
-   (defn initial-state []
-      {:todos [{:text "do laundry"}
-               {:text "email dad"}]}))
+   (defn initial-state [] 500))
+      
 
 (def state (tools/state-atom 0)) 
 
@@ -27,4 +27,5 @@
 
 ;; this will bootstrap the cljs code on
 ;; the browser side
+;; want to clean this up a bit
 (tools/inject state #'render)

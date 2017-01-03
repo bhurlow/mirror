@@ -90,16 +90,11 @@
         ns-str (str "pages." (name page-kw))
         render-sym (symbol (str ns-str "/render"))
         render-fn (resolve render-sym)
-        ;; this is breaking! why can't I look it up!
-        ;; gettinb back a 'var not an atom
-        ;; found workaround with fn but still confused
-        ; state-sym (symbol (str ns-str "/state"))
-        ; state-var (resolve state-sym)
         inital-state-sym (symbol (str ns-str "/initial-state"))
         inital-state-fn (resolve inital-state-sym)
-        reset-state-fn (resolve (symbol (str ns-str "/reset-state")))
-        props (when (and inital-state-fn reset-state-fn)
-                (reset-state-fn (inital-state-fn)))
+        props (when inital-state-fn
+                (reset! (deref (resolve (symbol (str ns-str "/state"))))
+                  (inital-state-fn)))
         body (render-fn)
         start (System/currentTimeMillis)
         js (compile/build-js path static-path)

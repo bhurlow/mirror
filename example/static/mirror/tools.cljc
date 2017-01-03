@@ -22,6 +22,7 @@
          (println "props" props)
          ;; TODO
          (println "state is right now" @state)
+         (reset! state props)
          ;; TODO how to derive the ns var??
          (r/render-component
           [render-fn]
