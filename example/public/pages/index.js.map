@@ -1,1 +1,0 @@
-{"version":3,"file":"\/Users\/pretzel\/code\/mirror\/example\/public\/pages\/index.js","sources":["index.cljc"],"lineCount":10,"mappings":";AAAA;;;AAGA,4BAAA,5BAACA;AAED,qBAAA,rBAAMC;AAAN,AAAA,0FAAA,mDAAA,mFAAA,kDAAA,cAGI,AAACC","names":["cljs.core\/println","pages.index\/render","pages.util\/foo"]}

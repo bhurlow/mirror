@@ -15,11 +15,13 @@
 
 (def compiler-env (env/default-compiler-env))
 
-(defn build-js [src]
+(defn build-js [src static-path]
+  (println "BUILD" static-path)
   (cljs.build.api/build src
    {:optimizations :none
     :cache-analysis true
     :compiler-stats true
     :parallel-build true
-    :output-dir "public"}
+    ; :asset-path "STATIC"
+    :output-dir static-path}
    compiler-env))
