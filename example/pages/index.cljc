@@ -3,24 +3,29 @@
             [mirror.tools :as tools]
    #?(:cljs [reagent.core :as r])))
 
-#?(:cljs (js/alert "SUP"))
+#?(:cljs (enable-console-print!))
 
-;; this will bootstrap the cljs code on
-;; the browser side
-(tools/inject)
+#?(:clj
+   (defn initial-state []
+      {:todos [{:text "do laundry"}
+               {:text "email dad"}]}))
 
-; (def state (tools/state-atom {})) 
-(def state (atom {}))
+(def state (tools/state-atom 0)) 
 
-(defn handle-click [e])
-  
+(defn handle-click [e]
+  (swap! state inc))
 
 ;; render is called on both backend 
 ;; and frontend
 (defn render []
   [:div 
     [:h1 "HELLO WORLD!"]
-    ; [:p (str "clicks ->" (:count @state))] 
+    [:p (str "clicks ->" @state)] 
     [:button {:on-click handle-click} "click me"]
     (u/foo)])
 
+
+;; this will bootstrap the cljs code on
+;; the browser side
+;; want to clean this up a bit
+(tools/inject state #'render)

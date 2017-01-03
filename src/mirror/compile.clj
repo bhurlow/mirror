@@ -16,7 +16,6 @@
 (def compiler-env (env/default-compiler-env))
 
 (defn build-js [src static-path]
-  (println "BUILD" static-path)
   (cljs.build.api/build src
    {:optimizations :none
     :cache-analysis true
