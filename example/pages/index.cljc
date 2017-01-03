@@ -6,6 +6,9 @@
 
 #?(:cljs (enable-console-print!))
 
+#?(:cljs (js/alert "INDEX10"))
+
+
 ;; the initial-state fn pre-populates the state atom
 (defn initial-state [] 500)
       

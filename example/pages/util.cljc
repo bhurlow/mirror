@@ -3,6 +3,8 @@
    #?(:cljs [goog.net.jsloader :as jsloader])
    #?(:cljs [goog.Uri :as guri])))
 
+#?(:cljs (js/alert "CHANGE13"))
+
 #?(:cljs
     (do
       (set! (.-isProvided_ js/goog) (fn [name] false))
