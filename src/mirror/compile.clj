@@ -47,6 +47,7 @@
   [src static-path callback]
   (cljs.build.api/watch src
     {:optimizations :none
+     :verbose false
      :output-dir static-path
      :watch-fn (compare-files static-path callback)}))
 

@@ -5,8 +5,7 @@
    #?(:cljs [mirror.repl :as repl])))
 
 #?(:cljs (enable-console-print!))
-
-#?(:cljs (js/alert "AGAIN"))
+#?(:cljs (js/alert "FOO"))
 
 
 ;; the initial-state fn pre-populates the state atom
