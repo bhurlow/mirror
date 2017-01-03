@@ -12,7 +12,7 @@
                  [org.clojure/clojurescript "1.9.293"]
                  [reagent "0.6.0" :exclusions [cljsjs/react]]
                  [hiccup "1.0.5"]
-                 [manifold "0.1.3"]
+                 [manifold "0.1.5"]
                  [me.raynes/fs "1.4.6"]
                  [mvxcvi/puget "1.0.1"]
                  [ring "1.4.0"]]

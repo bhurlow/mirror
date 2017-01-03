@@ -9,26 +9,14 @@
             [hiccup.element :refer :all]
             [ring.middleware.file :refer (wrap-file)]
             [ring.util.response :refer (response header redirect status)]
+            [manifold.stream :as s]
             [mirror.compile :as compile])
   (:import java.security.MessageDigest
            java.math.BigInteger))
 
 ;; ===== Def Protocol Page =====
 
-;; there must be a good clj way to do this!
-; (defn parse-deps 
-;   "given an ns form, extract deps in to a set"
-;   [form]
-;   (-> form
-;       third))
-
-
 (require 'cljs.build.api)
-
-(defn hash-pages-dir [pages-path]
-  (->> (fs/list-dir pages-path)
-       (map (fn [x] [(fs/base-name x) (-> x slurp md5)])) 
-       (into {})))
 
 (defn- pages-set
   "returns a set of keywords representing
