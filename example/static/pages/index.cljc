@@ -5,11 +5,9 @@
 
 #?(:cljs (enable-console-print!))
 
-;; the initial-state fn pre-populates
-#?(:clj
-   (defn initial-state [] 500))
+;; the initial-state fn pre-populates the state atom
+(defn initial-state [] 500)
       
-
 (def state (tools/state-atom 0)) 
 
 (defn handle-click [e]

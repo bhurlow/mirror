@@ -16,12 +16,11 @@
 ;; cljs init
 #?(:cljs 
    (defn- setup [state render-fn]
-     (println "setting up frontend")
+     (println "frontend init")
      (do
        (let [props (reader/read-string js/__MIRROR_DATA__)]
-         (println "props" props)
+         (println "initial props" props)
          ;; TODO
-         (println "state is right now" @state)
          (reset! state props)
          ;; TODO how to derive the ns var??
          (r/render-component

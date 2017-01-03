@@ -5,11 +5,11 @@
 
 #?(:cljs (enable-console-print!))
 
-;; the initial-state fn pre-populates
-#?(:clj
-   (defn initial-state [] 500))
+;; the initial-state fn pre-populates the state atom
+(defn initial-state [] 500)
       
-
+;; tools/state-atom provides a special kind of state
+;; atom that syncs with server
 (def state (tools/state-atom 0)) 
 
 (defn handle-click [e]
@@ -23,7 +23,6 @@
     [:p (str "clicks ->" @state)] 
     [:button {:on-click handle-click} "click me"]
     (u/foo)])
-
 
 ;; this will bootstrap the cljs code on
 ;; the browser side
