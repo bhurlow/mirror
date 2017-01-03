@@ -6,7 +6,7 @@
 
 #?(:cljs (enable-console-print!))
 
-#?(:cljs (js/alert "INDEX10"))
+#?(:cljs (js/alert "AGAIN"))
 
 
 ;; the initial-state fn pre-populates the state atom
