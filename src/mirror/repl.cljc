@@ -1,10 +1,11 @@
 (ns mirror.repl
-  (:require [mirror.tools :as tools]
-            #?(:cljs [reagent.core :as r])
-            #?(:cljs [cljs.js :as self])))
+  (:require [clojure.string]
+     #?(:cljs [reagent.core :as r])
+     #?(:cljs [cljs.js :as self])))
 
 (defonce state 
-  (r/atom {:history []}))
+  #?(:clj (atom {}))
+  #?(:cljs (r/atom {:history []})))
 
 (defn css-str [style-map]
   (->> style-map
@@ -17,8 +18,8 @@
       (reduce str)))
 
 (defn css [m]
-  ; {:style (css-str m)}
-  {:style (clj->js m)})
+  #?(:cljs {:style (clj->js m)})
+  #?(:clj {:style (css-str m)}))
 
 (def wrapper-style
   {:width "100%"
@@ -31,7 +32,7 @@
    #?(:cljs (cljs.js/empty-state)))
 
 (defn ctx-eval [x]
-  (js/eval (:source x)))
+  #?(:cljs (js/eval (:source x))))
 
 (defn handle-eval [form res]
   (swap! state update :history conj {:form form
@@ -51,8 +52,6 @@
           {:eval ctx-eval} 
           (partial handle-eval form))))))
 
-    ; (cljs.js/eval-str st % nil {:eval my-eval-fn} println))
-
 (defn handle-key [e]
   (when (= "Enter" (.-key e))
     (process-form @state)))
@@ -71,8 +70,10 @@
                     :on-key-press handle-key
                     :on-change handle-change})]])
 
-(defn repl []
-  (r/render-component
-    [render-repl]
-    (.getElementById js/document "repl")))
+(defn mount []
+  #?(:cljs 
+      (r/render-component
+        [render-repl]
+        (.getElementById js/document "repl"))))
+
 

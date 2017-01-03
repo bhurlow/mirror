@@ -1,7 +1,8 @@
 (ns pages.index
   (:require [pages.util :as u]
             [mirror.tools :as tools]
-   #?(:cljs [reagent.core :as r])))
+   #?(:cljs [reagent.core :as r])
+   #?(:cljs [mirror.repl :as repl])))
 
 #?(:cljs (enable-console-print!))
 
@@ -28,3 +29,5 @@
 ;; the browser side
 ;; want to clean this up a bit
 (tools/inject state #'render)
+
+#?(:cljs (repl/mount))

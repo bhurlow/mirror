@@ -10,7 +10,7 @@
 (defn watch-js [src]
   (cljs.build.api/watch src
     {:optimizations :none
-     :output-dir "public"
+     :output-dir "_public"
      :watch-fn watch-fn}))
 
 (def compiler-env (env/default-compiler-env))
