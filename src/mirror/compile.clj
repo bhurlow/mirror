@@ -7,10 +7,10 @@
 (defn watch-fn []
   (println "WATCH FN DONE"))
 
-(defn watch-js [src]
+(defn watch-js [src static-path]
   (cljs.build.api/watch src
     {:optimizations :none
-     :output-dir "_public"
+     :output-dir static-path
      :watch-fn watch-fn}))
 
 (def compiler-env (env/default-compiler-env))

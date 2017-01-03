@@ -25,9 +25,14 @@
     [:button {:on-click handle-click} "click me"]
     (u/foo)])
 
+#?(:cljs
+    (do
+      (aset js/window "testfn"
+        (fn [] (println "SUP!")))))
+
 ;; this will bootstrap the cljs code on
 ;; the browser side
 ;; want to clean this up a bit
 (tools/inject state #'render)
 
-#?(:cljs (repl/mount))
+; #?(:cljs (repl/mount))
