@@ -50,6 +50,23 @@ now edit your first file `pages/index.cljc`:
 
 `render` will be called on the backend, and additionally on the frontend if state changes are requried. `index.cljc` is automatically compiled for the frontend and included into the html page. 
 
+If using the CLI:
+
+```
+# will default to dirs name 'pages' and 'static'
+mirror 
+
+# but you can specify your own
+mirror src public
+
+# all cli flags are passed in as keywords, e.g.
+mirror :watch
+```
+
+### Supported CLI Flags
+
+- `:watch` 
+
 
 ### In-Project Usage
 
