@@ -10,7 +10,8 @@
             [ring.middleware.file :refer (wrap-file)]
             [ring.util.response :refer (response header redirect status)]
             [manifold.stream :as s]
-            [mirror.compile :as compile])
+            [mirror.compile :as compile]
+            [mirror.ws :as ws])
   (:import java.security.MessageDigest
            java.math.BigInteger))
 
@@ -90,5 +91,25 @@
   []
   (-> (response "mir not found")
       (status 404)))
+
+(defn relativize [base target]
+  (.getPath
+    (.relativize (.toURI (fs/file base))
+                 (.toURI (fs/file target)))))
+
+(defn watch-reload [src-path static-path]
+  (compile/watch-js 
+    src-path
+    static-path
+    (fn [changed]
+      (let [to-reload
+            (->> changed
+                 (map #(relativize static-path %))
+                 (filter #(.endsWith % ".js"))
+                 (set))]
+        (println "to-reload" to-reload)
+        (ws/broadcast [:reload to-reload]))))) 
+         
+
 
 

@@ -38,6 +38,7 @@
    (defn- handle-ss-cmd [s]
      ;; TODO assert form of cmds
      (let [data (read-string s)] 
+       (println data)
        (case (first data)
          :reload (doall (map reload-js-file (second data)))
          (println "dont know the" (first data) "cmd")))))
@@ -88,8 +89,8 @@
 (defn inject [state render-fn]
   #?(:cljs 
      (do
+       (setup-react state render-fn)
        (when-not @initialized
-         (setup-react state render-fn)
          (init-ws)
          (reset! initialized true)))))
 

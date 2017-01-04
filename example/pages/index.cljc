@@ -13,7 +13,7 @@
 (def state (tools/state-atom 0)) 
 
 (defn handle-click [e]
-  (swap! state inc))
+  (swap! state (fn [x] (- x 100))))
 
 ;; render is called on both backend 
 ;; and frontend

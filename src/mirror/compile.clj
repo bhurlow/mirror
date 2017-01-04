@@ -5,6 +5,7 @@
   (:import java.security.MessageDigest
            java.math.BigInteger))
 
+;; move to util?
 (defn md5 [s]
   (let [algorithm (MessageDigest/getInstance "MD5")
         size (* 2 (.getDigestLength algorithm))
@@ -13,9 +14,8 @@
         padding (apply str (repeat (- size (count sig)) "0"))]
     (str padding sig)))
 
-;; id prefer to stat the file for modification
-;; instead of reading whole contents 
-;; but idk how to do this in java
+;; this should use .lastModified method on File
+;; no need to actually hash the contents
 (defn checksum-files [static-path]
   (->> (file-seq (fs/file static-path))
        (filter #(.isFile %))
