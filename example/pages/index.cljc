@@ -1,12 +1,9 @@
 (ns pages.index
   (:require [pages.util :as u]
             [mirror.tools :as tools]
-   #?(:cljs [reagent.core :as r])
-   #?(:cljs [mirror.repl :as repl])))
+   #?(:cljs [reagent.core :as r])))
 
 #?(:cljs (enable-console-print!))
-#?(:cljs (js/alert "FOO"))
-
 
 ;; the initial-state fn pre-populates the state atom
 (defn initial-state [] 500)
@@ -27,14 +24,7 @@
     [:button {:on-click handle-click} "click me"]
     (u/foo)])
 
-#?(:cljs
-    (do
-      (aset js/window "testfn"
-        (fn [] (println "SUP!")))))
-
 ;; this will bootstrap the cljs code on
 ;; the browser side
 ;; want to clean this up a bit
 (tools/inject state #'render)
-
-; #?(:cljs (repl/mount))

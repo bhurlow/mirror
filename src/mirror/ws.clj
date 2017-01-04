@@ -14,5 +14,5 @@
 
 (defn broadcast [msg]
   (doseq [conn (open-conns)]
-    (s/put! conn msg)))
+    (s/put! conn (pr-str msg))))
   

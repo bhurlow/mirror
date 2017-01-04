@@ -1,5 +1,6 @@
 (ns mirror.middleware
   (:require [mirror.core :as c]
+            [mirror.ws :as ws]
             [aleph.http :as http]
             [manifold.stream :as s]
             [ring.middleware.file :refer (wrap-file)]
@@ -16,7 +17,8 @@
   (if (= "/_ws" (:uri req))
     (do
       (let [s @(http/websocket-connection req)]
-        (swap! mirror.ws/ws-conns conj s))))
+        (println "websocket connection")
+        (swap! ws/ws-conns conj s))))
   (response "page not found"))
 
 (defn make-handler [pages-path static-path]
