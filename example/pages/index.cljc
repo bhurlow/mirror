@@ -1,9 +1,9 @@
 (ns pages.index
   (:require [pages.util :as u]
-            [mirror.tools :as tools]
-   #?(:cljs [cljsjs.react])
-   #?(:cljs [reagent.core :as r])))
+            [mirror.tools :as tools]))
 
+   ; #?(:cljs [cljsjs.react])
+   ; #?(:cljs [reagent.core :as r])))
    ; #?(:cljs [cljsjs.react.dom])
    ; #?(:cljs [cljsjs.react.dom.server])))
 

@@ -54,6 +54,7 @@
 (def compiler-env (env/default-compiler-env))
 
 (defn build-js [src static-path]
+  (println "building js in" src static-path)
   (cljs.build.api/build src
    {:optimizations :none
     :cache-analysis true
