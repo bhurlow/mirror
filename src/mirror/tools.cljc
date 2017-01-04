@@ -94,3 +94,15 @@
          (init-ws)
          (reset! initialized true)))))
 
+;; for evaluating self-hosted
+;; and use in repl
+; #?(:cljs
+;    (do
+;      (def st (cljs.js/empty-state))
+;      (def my-eval-fn 
+;        (fn [x] 
+;          (println "EVAL FN" x)
+;          (js/eval (:source x))))
+;      (let [eval-fn #(cljs.js/eval-str st % nil {:eval my-eval-fn} println)]
+;        (aset js/window (name :myeval) eval-fn))))
+
