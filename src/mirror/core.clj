@@ -9,33 +9,15 @@
             [hiccup.element :refer :all]
             [ring.middleware.file :refer (wrap-file)]
             [ring.util.response :refer (response header redirect status)]
-            [mirror.compile :as compile])
+            [manifold.stream :as s]
+            [mirror.compile :as compile]
+            [mirror.ws :as ws])
   (:import java.security.MessageDigest
            java.math.BigInteger))
 
 ;; ===== Def Protocol Page =====
 
-;; there must be a good clj way to do this!
-; (defn parse-deps 
-;   "given an ns form, extract deps in to a set"
-;   [form]
-;   (-> form
-;       third))
-
-(defn md5 [s]
-  (let [algorithm (MessageDigest/getInstance "MD5")
-        size (* 2 (.getDigestLength algorithm))
-        raw (.digest algorithm (.getBytes s))
-        sig (.toString (BigInteger. 1 raw) 16)
-        padding (apply str (repeat (- size (count sig)) "0"))]
-    (str padding sig)))
-
 (require 'cljs.build.api)
-
-(defn hash-pages-dir [pages-path]
-  (->> (fs/list-dir pages-path)
-       (map (fn [x] [(fs/base-name x) (-> x slurp md5)])) 
-       (into {})))
 
 (defn- pages-set
   "returns a set of keywords representing
@@ -82,7 +64,7 @@
 (defn serve-page 
   "find a page file matching page-kw. renders and serves
    the found file with compile js"
-  [path page-kw]
+  [path static-path page-kw]
   ;; TODO refactor to have all this happen in 
   ;; bound ns and return data
   (let [path (str path "/" (name page-kw) ".cljc")
@@ -90,19 +72,14 @@
         ns-str (str "pages." (name page-kw))
         render-sym (symbol (str ns-str "/render"))
         render-fn (resolve render-sym)
-        ;; this is breaking! why can't I look it up!
-        ;; gettinb back a 'var not an atom
-        ;; found workaround with fn but still confused
-        ; state-sym (symbol (str ns-str "/state"))
-        ; state-var (resolve state-sym)
         inital-state-sym (symbol (str ns-str "/initial-state"))
         inital-state-fn (resolve inital-state-sym)
-        reset-state-fn (resolve (symbol (str ns-str "/reset-state")))
-        props (when (and inital-state-fn reset-state-fn)
-                (reset-state-fn (inital-state-fn)))
+        props (when inital-state-fn
+                (reset! (deref (resolve (symbol (str ns-str "/state"))))
+                  (inital-state-fn)))
         body (render-fn)
         start (System/currentTimeMillis)
-        js (compile/build-js path)
+        js (compile/build-js path static-path)
         end (System/currentTimeMillis)]
     (println "compiled cljs in" (- end start))
     (if (nil? render-fn)
@@ -114,5 +91,25 @@
   []
   (-> (response "mir not found")
       (status 404)))
+
+(defn relativize [base target]
+  (.getPath
+    (.relativize (.toURI (fs/file base))
+                 (.toURI (fs/file target)))))
+
+(defn watch-reload [src-path static-path]
+  (compile/watch-js 
+    src-path
+    static-path
+    (fn [changed]
+      (let [to-reload
+            (->> changed
+                 (map #(relativize static-path %))
+                 (filter #(.endsWith % ".js"))
+                 (set))]
+        (println "to-reload" to-reload)
+        (ws/broadcast [:reload to-reload]))))) 
+         
+
 
 

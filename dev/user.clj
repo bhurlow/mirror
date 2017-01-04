@@ -12,4 +12,9 @@
 (defn go []
   (start-server))
 
+(defn restart []
+  (when @server (.close @server))
+  (require 'mirror.middleware :reload-all)
+  (start-server))
+
 
