@@ -75,7 +75,7 @@ first download using leiningen
 in your project.clj deps:
 
 ```clj
-[mirror "0.1.0"]
+[mirror "0.1.1"]
 ```
 and in your project, use the middleware:
 
