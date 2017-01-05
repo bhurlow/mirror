@@ -5,11 +5,12 @@ A mimimal framework for writing isomorphic clj/cljs web applications. Mirror sha
 Mirror automatically compiles and includes your cljs code into the 
 resulting html page
 
-Every path like `/about` maps to a file like `pages/about.cljc` 
+Every path like `/about` maps to a matching file like `pages/about.cljc` 
 
 HTML is expressed as hiccup style vectors, providing a JSX like experience without introducing new syntax or compile steps
 
-And more on the horizon...
+The `:watch` options hot reloads your code as you edit files (a la figwheel) 
+
 
 
 ### Install CLI
