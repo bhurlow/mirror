@@ -2,11 +2,6 @@
   (:require [pages.util :as u]
             [mirror.tools :as tools]))
 
-   ; #?(:cljs [cljsjs.react])
-   ; #?(:cljs [reagent.core :as r])))
-   ; #?(:cljs [cljsjs.react.dom])
-   ; #?(:cljs [cljsjs.react.dom.server])))
-
 #?(:cljs (enable-console-print!))
 
 ;; the initial-state fn pre-populates the state atom
@@ -17,7 +12,7 @@
 (def state (tools/state-atom 0)) 
 
 (defn handle-click [e]
-  (swap! state (fn [x] (- x 100))))
+  (swap! state (fn [x] (- x 10))))
 
 ;; render is called on both backend 
 ;; and frontend

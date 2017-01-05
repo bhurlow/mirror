@@ -3,7 +3,5 @@
    #?(:cljs [goog.net.jsloader :as jsloader])
    #?(:cljs [goog.Uri :as guri])))
 
-#?(:cljs (js/alert "IN THIS 60"))
-
 (defn foo []
-  [:h1 "HOLAAAA"])
+  [:h1 "Another Component"])
