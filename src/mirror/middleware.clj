@@ -3,9 +3,12 @@
             [mirror.ws :as ws]
             [aleph.http :as http]
             [manifold.stream :as s]
+            [ring.middleware.params :refer (wrap-params)]
+            [ring.middleware.keyword-params :refer (wrap-keyword-params)]
             [ring.middleware.file :refer (wrap-file)]
             [ring.middleware.resource :refer (wrap-resource)]
-            [ring.util.response :refer (response header redirect status)]))
+            [ring.util.response :refer (response header redirect status)]
+            [ring-image-crop.core :refer (wrap-image-crop)]))
 
 (defn wrap-pages [h pages-path static-path]
   (fn [req]
@@ -26,5 +29,7 @@
       (wrap-pages pages-path static-path)
       (wrap-file static-path)
       (wrap-image-crop static-path)
+      (wrap-keyword-params)
+      (wrap-params)
       (wrap-resource "/")))
 
