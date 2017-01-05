@@ -10,6 +10,7 @@
                  ;; https://github.com/bhurlow/mirror/issues/14
                  ;; reagent 0.6.0 breaks stuff... ?? 
                  [reagent "0.5.0"]
+                 [ring-image-crop "0.0.1"]
                  [org.clojure/clojurescript "1.9.293"]
                  [hiccup "1.0.5"]
                  [manifold "0.1.5"]

@@ -25,5 +25,6 @@
   (-> #'handler
       (wrap-pages pages-path static-path)
       (wrap-file static-path)
+      (wrap-image-crop static-path)
       (wrap-resource "/")))
 
