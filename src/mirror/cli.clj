@@ -26,15 +26,18 @@
         static-path (or (some-> (second args) str) "static")]
     (check-if-flags-valid flags)
     (check-if-files-exists pages-path static-path)
-    (when watch?
-      (println "watching for changes in" pages-path)
-      (core/watch-reload pages-path static-path))
     (let [port (or (System/getenv "PORT") 3000)]
       (println "starting server on port" port)
       (http/start-server 
         (make-handler pages-path static-path) 
-        {:port port}))))
+        {:port port}))
+    ;; this blocks
+    (when watch?
+      (println "watching for changes in" pages-path)
+      (core/watch-reload pages-path static-path))))
 
 (defn -main [& args] 
   (cli-start args))
+
+
 
