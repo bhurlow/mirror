@@ -7,10 +7,9 @@
   :repositories [["releases" {:url "https://clojars.org/repo" :creds :gpg}]]
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [aleph "0.4.1-beta7"]
-                 [reagent "0.6.0"]
-                 [cljsjs/react "15.4.0-0"] 
-                 ; [reagent "0.6.0" :exclusions [cljsjs/react]]
-                 ; [cljsjs/react-with-addons "15.2.1-0"]
+                 ;; https://github.com/bhurlow/mirror/issues/14
+                 ;; reagent 0.6.0 breaks stuff... ?? 
+                 [reagent "0.5.0"]
                  [org.clojure/clojurescript "1.9.293"]
                  [hiccup "1.0.5"]
                  [manifold "0.1.5"]
