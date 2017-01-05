@@ -2,4 +2,4 @@
 echo "starting mirror"
 SCRIPT_PATH=$(dirname `readlink -- $0`)
 REPO_ROOT=$(cd $SCRIPT_PATH && cd .. && pwd)
-java -cp $REPO_ROOT/target/mirror.jar:$PWD mirror.cli
+java -cp $REPO_ROOT/target/mirror.jar:$PWD mirror.cli "$@"
