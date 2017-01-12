@@ -5,16 +5,15 @@
 
 (defonce server (atom nil))
 
-(defn start-server []
-  (let [handler (make-handler "example/pages" "example/static")]
+(defn start-server [build?]
+  (let [handler (make-handler "example/pages" "example/static" build?)]
     (reset! server (http/start-server handler {:port 3000}))))
 
-(defn go []
-  (start-server))
+(defn go [build?]
+  (start-server build?))
 
-(defn restart []
+(defn stop []
   (when @server (.close @server))
-  (require 'mirror.middleware :reload-all)
-  (start-server))
+  (require 'mirror.middleware :reload-all))
 
 

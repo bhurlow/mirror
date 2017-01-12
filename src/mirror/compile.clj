@@ -53,14 +53,28 @@
 
 (def compiler-env (env/default-compiler-env))
 
-(defn build-js [src static-path]
+(defonce last-build-checksum 
+  (atom #{}))
+
+(defn rebuild-required? [src]
+  (not= (checksum-files src) 
+        @last-build-checksum))
+
+(defn build-js [src static-path build?]
   (println "building js in" src static-path)
-  (cljs.build.api/build src
-   {:optimizations :none
-    :cache-analysis true
-    :compiler-stats true
-    :parallel-build true
-    ; :asset-path "STATIC"
-    :output-dir static-path}
-   compiler-env))
+  (println "building advanced?" build?)
+  (when (rebuild-required? src)
+    (println "REBUILD REQUIRED")
+    (reset! last-build-checksum (checksum-files src))
+    (cljs.build.api/build 
+      src
+      (if (not build?)
+         {:optimizations :none
+          :cache-analysis true
+          :compiler-stats true
+          :parallel-build true
+          :output-dir static-path}
+         {:optimizations :advanced
+          :output-dir static-path})
+      compiler-env)))
 

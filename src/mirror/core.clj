@@ -64,9 +64,10 @@
 (defn serve-page 
   "find a page file matching page-kw. renders and serves
    the found file with compile js"
-  [path static-path page-kw]
+  [path static-path page-kw build?]
   ;; TODO refactor to have all this happen in 
   ;; bound ns and return data
+  (println "SERVE PAGE BUILD?" build?)
   (let [path (str path "/" (name page-kw) ".cljc")
         load-res (load-file path)
         ns-str (str "pages." (name page-kw))
@@ -79,7 +80,7 @@
                   (inital-state-fn)))
         body (render-fn)
         start (System/currentTimeMillis)
-        js (compile/build-js path static-path)
+        js (compile/build-js path static-path build?)
         end (System/currentTimeMillis)]
     (println "compiled cljs in" (- end start))
     (if (nil? render-fn)

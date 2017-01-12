@@ -22,6 +22,7 @@
         flags (set (filter keyword? parsed))
         args (filter (complement keyword?) parsed)
         watch? (contains? flags :watch)
+        build? (contains? flags :build)
         pages-path  (or (some-> (first args) str) "pages")
         static-path (or (some-> (second args) str) "static")]
     (check-if-flags-valid flags)
@@ -29,7 +30,10 @@
     (let [port (or (System/getenv "PORT") 3000)]
       (println "starting server on port" port)
       (http/start-server 
-        (make-handler pages-path static-path) 
+        (make-handler 
+          pages-path 
+          static-path 
+          (or build? false))
         {:port port}))
     ;; this blocks
     (when watch?

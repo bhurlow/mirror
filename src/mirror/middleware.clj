@@ -10,11 +10,15 @@
             [ring.util.response :refer (response header redirect status)]
             [ring-image-crop.core :refer (wrap-image-crop)]))
 
-(defn wrap-pages [h pages-path static-path]
+(defn wrap-pages [h pages-path static-path build?]
   (fn [req]
     (if (not (c/page-exists? pages-path (c/extract-path-kw req)))
       (h req)
-      (c/serve-page pages-path static-path (c/extract-path-kw req)))))
+      (c/serve-page 
+        pages-path 
+        static-path 
+        (c/extract-path-kw req)
+        build?))))
 
 (defn handler [req]
   (if (= "/_ws" (:uri req))
@@ -24,9 +28,9 @@
         (swap! ws/ws-conns conj s))))
   (response "page not found"))
 
-(defn make-handler [pages-path static-path]
+(defn make-handler [pages-path static-path build?]
   (-> #'handler
-      (wrap-pages pages-path static-path)
+      (wrap-pages pages-path static-path build?)
       (wrap-file static-path)
       (wrap-image-crop static-path)
       (wrap-keyword-params)
