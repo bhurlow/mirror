@@ -5,11 +5,12 @@
 #?(:cljs (enable-console-print!))
 
 ;; the initial-state fn pre-populates the state atom
-(defn initial-state [] 500)
+(defn initial-state []
+  {:foo 123})
       
 ;; tools/state-atom provides a special kind of state
 ;; atom that syncs with server
-(def state (tools/state-atom 0)) 
+(defonce state (tools/state-atom {})) 
 
 (defn handle-click [e]
   (swap! state (fn [x] (- x 10))))
