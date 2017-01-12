@@ -71,7 +71,7 @@
   [path static-path page-kw build?]
   ;; TODO refactor to have all this happen in 
   ;; bound ns and return data
-  (println "SERVE PAGE BUILD?" build?)
+  (println "serving" page-kw)
   (let [path (str path "/" (name page-kw) ".cljc")
         load-res (load-file path)
         ns-str (str "pages." (name page-kw))
@@ -87,9 +87,6 @@
         js (compile/build-js path static-path build?)
         end (System/currentTimeMillis)]
     (println "compiled cljs in" (- end start))
-    (println "J---- S OUTPUT")
-    (println js)
-    (println "-----")
     (if (nil? render-fn)
       (response (str "could not find var: " render-sym))
       (-> (layout (symbol ns-str) js build? props body)

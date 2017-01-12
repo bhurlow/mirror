@@ -55,24 +55,27 @@
 
 (def compiler-env (env/default-compiler-env))
 
-(defonce build-cache (atom nil))
+(defonce build-cache 
+  (atom {}))
 
 (defonce last-build-checksum 
-  (atom #{}))
+  (atom {}))
 
 (defn rebuild-required? [src]
   (not= (checksum-files src) 
-        @last-build-checksum))
+        (get @last-build-checksum src)))
 
 (defn build-js [src static-path build?]
-  (println "building js in" src static-path)
+  (println "building js for" src static-path)
   (println "building advanced?" build?)
   (if (not (rebuild-required? src))
-    @build-cache
+    (do
+      (println "no js build required")
+      (get @build-cache src))
     (do 
-      (println "REBUILD REQUIRED")
-      (reset! last-build-checksum (checksum-files src))
-      (reset! build-cache 
+      (println "building production js...")
+      (swap! last-build-checksum assoc src (checksum-files src))
+      (swap! build-cache assoc src
         (cljs.build.api/build 
           src
           (if (not build?)
