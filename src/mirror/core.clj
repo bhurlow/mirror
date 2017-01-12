@@ -50,16 +50,20 @@
 (defn goog-require-str [ns-sym]
   (str "goog.require('" (str ns-sym) "')"))
 
-(defn layout [ns-sym js props & body]
+(defn layout [ns-sym js build? props & body]
   (html5
     [:body
       [:div#__mount body]
       [:div#repl]
       (javascript-tag (str "__MIRROR_DATA__ = " "'" (pr-str props) "'"))
       (include-css "/tachyons.min.css")
-      (include-js "goog/base.js")
-      (javascript-tag js)
-      (javascript-tag (goog-require-str ns-sym))]))
+      (if (not build?)
+        [:div
+          (include-js "goog/base.js")
+          (javascript-tag js)
+          (javascript-tag (goog-require-str ns-sym))]
+        [:div
+          (javascript-tag js)])]))
 
 (defn serve-page 
   "find a page file matching page-kw. renders and serves
@@ -83,9 +87,12 @@
         js (compile/build-js path static-path build?)
         end (System/currentTimeMillis)]
     (println "compiled cljs in" (- end start))
+    (println "J---- S OUTPUT")
+    (println js)
+    (println "-----")
     (if (nil? render-fn)
       (response (str "could not find var: " render-sym))
-      (-> (layout (symbol ns-str) js props body)
+      (-> (layout (symbol ns-str) js build? props body)
           (response)))))
 
 (defn serve-not-found

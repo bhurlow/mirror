@@ -5,8 +5,7 @@
 #?(:cljs (enable-console-print!))
 
 ;; the initial-state fn pre-populates the state atom
-(defn initial-state []
-  {:foo 123})
+(defn initial-state [] 88)
       
 ;; tools/state-atom provides a special kind of state
 ;; atom that syncs with server

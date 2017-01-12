@@ -51,7 +51,11 @@
      :output-dir static-path
      :watch-fn (compare-files static-path callback)}))
 
+;; ===== production js builds 
+
 (def compiler-env (env/default-compiler-env))
+
+(defonce build-cache (atom nil))
 
 (defonce last-build-checksum 
   (atom #{}))
@@ -63,18 +67,22 @@
 (defn build-js [src static-path build?]
   (println "building js in" src static-path)
   (println "building advanced?" build?)
-  (when (rebuild-required? src)
-    (println "REBUILD REQUIRED")
-    (reset! last-build-checksum (checksum-files src))
-    (cljs.build.api/build 
-      src
-      (if (not build?)
-         {:optimizations :none
-          :cache-analysis true
-          :compiler-stats true
-          :parallel-build true
-          :output-dir static-path}
-         {:optimizations :advanced
-          :output-dir static-path})
-      compiler-env)))
+  (if (not (rebuild-required? src))
+    @build-cache
+    (do 
+      (println "REBUILD REQUIRED")
+      (reset! last-build-checksum (checksum-files src))
+      (reset! build-cache 
+        (cljs.build.api/build 
+          src
+          (if (not build?)
+             {:optimizations :none
+              :cache-analysis true
+              :compiler-stats true
+              :parallel-build true
+              :output-dir static-path}
+             {:optimizations :advanced
+              :parallel-build true
+              :output-dir static-path})
+          compiler-env)))))
 
