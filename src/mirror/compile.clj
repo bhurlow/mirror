@@ -75,17 +75,18 @@
     (do 
       (println "building production js...")
       (swap! last-build-checksum assoc src (checksum-files src))
-      (swap! build-cache assoc src
-        (cljs.build.api/build 
-          src
-          (if (not build?)
-             {:optimizations :none
-              :cache-analysis true
-              :compiler-stats true
-              :parallel-build true
-              :output-dir static-path}
-             {:optimizations :advanced
-              :parallel-build true
-              :output-dir static-path})
-          compiler-env)))))
+      (-> (swap! build-cache assoc src
+            (cljs.build.api/build 
+              src
+              (if (not build?)
+                 {:optimizations :none
+                  :cache-analysis true
+                  :compiler-stats true
+                  :parallel-build true
+                  :output-dir static-path}
+                 {:optimizations :advanced
+                  :parallel-build true
+                  :output-dir static-path})
+              compiler-env))
+          (get src)))))
 
