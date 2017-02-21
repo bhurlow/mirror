@@ -1,4 +1,4 @@
-(defproject mirror "0.2.0"
+(defproject mirror "0.2.1"
   :description "isomorphic clojure/script web apps"
   :main mirror.core
   :url "https://github.com/bhurlow/mirror"
