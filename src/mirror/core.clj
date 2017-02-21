@@ -50,8 +50,14 @@
 (defn goog-require-str [ns-sym]
   (str "goog.require('" (str ns-sym) "')"))
 
+(defn- mobile-viewport-tag []
+  [:meta {:name "viewport"
+          :content "width=device-width, initial-scale=1, user-scalable=no"}])
+
 (defn layout [ns-sym js build? props & body]
   (html5
+    [:head
+      (mobile-viewport-tag)]
     [:body
       [:div#__mount body]
       [:div#repl]
