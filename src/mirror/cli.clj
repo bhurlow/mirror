@@ -24,7 +24,7 @@
         watch? (contains? flags :watch)
         build? (contains? flags :build)
         pages-path  (or (some-> (first args) str) "pages")
-        static-path (or (some-> (second args) str) "static")]
+        static-path (or (some-> (second args) str) "static/out")]
     (check-if-flags-valid flags)
     (check-if-files-exists pages-path static-path)
     (let [port (or (System/getenv "PORT") 3000)]
