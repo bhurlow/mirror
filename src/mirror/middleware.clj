@@ -7,8 +7,8 @@
             [ring.middleware.keyword-params :refer (wrap-keyword-params)]
             [ring.middleware.file :refer (wrap-file)]
             [ring.middleware.resource :refer (wrap-resource)]
-            [ring.util.response :refer (response header redirect status)]
-            [ring-image-crop.core :refer (wrap-image-crop)]))
+            [ring.util.response :refer (response header redirect status)]))
+            ; [ring-image-crop.core :refer (wrap-image-crop)]))
 
 (defn wrap-pages [h pages-path static-path build?]
   (fn [req]
@@ -32,7 +32,7 @@
   (-> #'handler
       (wrap-pages pages-path static-path build?)
       (wrap-file static-path)
-      (wrap-image-crop static-path)
+      ; (wrap-image-crop static-path)
       (wrap-keyword-params)
       (wrap-params)
       (wrap-resource "/")))

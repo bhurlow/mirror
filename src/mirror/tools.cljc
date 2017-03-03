@@ -73,10 +73,8 @@
 ;; cljs init
 #?(:cljs 
    (defn- setup-react [state render-fn]
-     (println "frontend init")
      (do
        (let [props (reader/read-string js/__MIRROR_DATA__)]
-         (println "initial props" props)
          ;; TODO
          (reset! state props)
          ;; TODO how to derive the ns var??
